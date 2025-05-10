@@ -3,26 +3,35 @@ git_commit_id() {
 }
 
 # Git prompt settings
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY="%F{red}✹%f"       # Dirty indicator
+ZSH_THEME_GIT_PROMPT_PREFIX="%F{cyan}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
+ZSH_THEME_GIT_PROMPT_DIRTY="%F{red}✹%f"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-# Virtualenv settings (comes FIRST)
+# Virtualenv
 VIRTUAL_ENV_DISABLE_PROMPT=1
-ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}🐍%f"   # Snake with color
-ZSH_THEME_VIRTUALENV_SUFFIX=""
+ZSH_THEME_VIRTUALENV_PREFIX="("
+ZSH_THEME_VIRTUALENV_SUFFIX=") "
 
 # Compact commit display
 git_commit_prompt() {
   local commit=$(git_commit_id)
   if [ -n "$commit" ]; then
-    echo " %F{240}[%f%F{gray}${commit}%f%F{240}]%f"
+    echo " [%F{gray}${commit}%f]"
   fi
 }
 
-# Final prompt - venv first, then git, then commit
-PROMPT='$(virtualenv_prompt_info)$(git_prompt_info)$(git_commit_prompt) %F{white}$%f '
+# Show only the last two segments of $PWD, with color
+short_pwd() {
+  local dir="${PWD/#$HOME/~}"
+  local short=$(echo "$dir" | awk -F/ '{
+    if (NF >= 2) print $(NF-1) "/" $NF;
+    else print $NF
+  }')
+  echo "%F{green}${short}%f"
+}
 
-# Disable right prompt
+# Final prompt
+PROMPT='$(virtualenv_prompt_info)$(short_pwd) | $(git_prompt_info)$(git_commit_prompt)
+%F{red}$%f '
 RPROMPT=''
