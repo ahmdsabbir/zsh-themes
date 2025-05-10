@@ -3,7 +3,7 @@ git_commit_id() {
 }
 
 # Git prompt settings with Git symbol
-ZSH_THEME_GIT_PROMPT_PREFIX="%F{cyan} "
+ZSH_THEME_GIT_PROMPT_PREFIX="%F{81} "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
 ZSH_THEME_GIT_PROMPT_DIRTY="%F{red}✹%f"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
@@ -17,7 +17,7 @@ ZSH_THEME_VIRTUALENV_SUFFIX=")%f "
 git_commit_prompt() {
   local commit=$(git_commit_id)
   if [ -n "$commit" ]; then
-    echo " %F{116}[%f%F{116}${commit}%f%F{116}]%f"
+    echo " %F{75}[%f%F{75}${commit}%f%F{75}]%f"
   fi
 }
 
@@ -28,7 +28,7 @@ short_pwd() {
     if (NF >= 2) print $(NF-1) "/" $NF;
     else print $NF
   }')
-  echo "%F{green} /${short}%f"
+  echo "%F{88} /${short}%f"
 }
 
 ssh_lock_prompt() {
@@ -40,6 +40,6 @@ ssh_lock_prompt() {
 
 # Final prompt
 PROMPT='$(ssh_lock_prompt)$(virtualenv_prompt_info)$(short_pwd) $(git_prompt_info)$(git_commit_prompt)
-%F{red}▶%f '
+%F{87}$%f '
 
 RPROMPT=''
