@@ -1,3 +1,4 @@
+# Get short Git commit ID
 git_commit_id() {
   command git rev-parse --short HEAD 2>/dev/null
 }
@@ -13,7 +14,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}venv("
 ZSH_THEME_VIRTUALENV_SUFFIX=")%f "
 
-# Commit hash display
+# Git commit hash display
 git_commit_prompt() {
   local commit=$(git_commit_id)
   if [ -n "$commit" ]; then
@@ -31,15 +32,26 @@ short_pwd() {
   echo "%F{88} /${short}%f"
 }
 
+# SSH lock icon if over SSH
 ssh_lock_prompt() {
   if [[ -n "$SSH_CONNECTION" ]]; then
     echo "%F{magenta}🔒%f "
   fi
 }
 
-
-# Final prompt
-PROMPT='$(ssh_lock_prompt)$(virtualenv_prompt_info)$(short_pwd) $(git_prompt_info)$(git_commit_prompt)
+# Dynamically set PROMPT: one-line in ~, two-line otherwise
+set_prompt() {
+  local dir="${PWD/#$HOME/~}"
+  if [[ "$dir" == "~" ]]; then
+    PROMPT='$(ssh_lock_prompt)$(virtualenv_prompt_info)$(short_pwd) $(git_prompt_info)$(git_commit_prompt) %F{87}$%f '
+  else
+    PROMPT='$(ssh_lock_prompt)$(virtualenv_prompt_info)$(short_pwd) $(git_prompt_info)$(git_commit_prompt)
 %F{87}$%f '
+  fi
+}
 
+# Update prompt before each command
+precmd_functions+=(set_prompt)
+
+# No right prompt
 RPROMPT=''
