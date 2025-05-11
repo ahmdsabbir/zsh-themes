@@ -1,8 +1,3 @@
-# Get short Git commit ID
-git_commit_id() {
-  command git rev-parse --short HEAD 2>/dev/null
-}
-
 # Git prompt settings with Git symbol
 ZSH_THEME_GIT_PROMPT_PREFIX="%F{81} "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
@@ -13,6 +8,19 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 VIRTUAL_ENV_DISABLE_PROMPT=1
 ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}venv("
 ZSH_THEME_VIRTUALENV_SUFFIX=")%f "
+
+is_home() {
+  if [[ "$dir" == "~" ]]; then
+    return true
+  else
+    return false
+  fi
+}
+
+# Get short Git commit ID
+git_commit_id() {
+  command git rev-parse --short HEAD 2>/dev/null
+}
 
 # Git commit hash display
 git_commit_prompt() {
@@ -42,11 +50,17 @@ ssh_lock_prompt() {
 # Dynamically set PROMPT: one-line in ~, two-line otherwise
 set_prompt() {
   local dir="${PWD/#$HOME/~}"
-  if [[ "$dir" == "~" ]]; then
-    PROMPT='$(ssh_lock_prompt)$(virtualenv_prompt_info)$(short_pwd) $(git_prompt_info)$(git_commit_prompt) %F{87}$%f '
+
+  local ssh_part='$(ssh_lock_prompt)'
+  local venv_part='$(virtualenv_prompt_info)'
+  local dir_part='$(short_pwd)'
+  local git_part='$(git_prompt_info)$(git_commit_prompt)'
+  local prompt_end='%F{87}$%f'
+
+  if is_home(); then
+    PROMPT="${ssh_part}${venv_part}${dir_part} ${git_part} ${prompt_end} "
   else
-    PROMPT='$(ssh_lock_prompt)$(virtualenv_prompt_info)$(short_pwd) $(git_prompt_info)$(git_commit_prompt)
-%F{87}$%f '
+    PROMPT="${ssh_part}${venv_part}${dir_part} ${git_part}"$'\n'"${prompt_end} "
   fi
 }
 
