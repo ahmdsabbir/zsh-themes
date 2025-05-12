@@ -16,7 +16,7 @@ short_pwd() {
     if (NF >= 2) print $(NF-1) "/" $NF;
     else print $NF
   }')
-  echo "%F{88}🗂  ${short}%f"
+  echo "%F{76}🗂  ${short}%f"
 }
 
 # SSH lock icon if over SSH
