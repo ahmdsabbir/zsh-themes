@@ -48,6 +48,11 @@ is_home() {
   [[ "$dir" == "~" ]]
 }
 
+git_prompt_info() {
+  ref=$(git symbolic-ref --short HEAD 2>/dev/null)
+  [[ -n "$ref" ]] && echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+}
+
 # Dynamically set PROMPT: one-line in ~, two-line elsewhere
 set_prompt() {
   local ssh_part='$(ssh_lock_prompt)'
