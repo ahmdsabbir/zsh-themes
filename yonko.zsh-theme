@@ -50,7 +50,15 @@ is_home() {
 
 git_prompt_info() {
   ref=$(git symbolic-ref --short HEAD 2>/dev/null)
-  [[ -n "$ref" ]] && echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  if [[ -n "$ref" ]]; then
+    # Check if the repo is dirty
+    if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
+      dirty=$ZSH_THEME_GIT_PROMPT_DIRTY
+    else
+      dirty=$ZSH_THEME_GIT_PROMPT_CLEAN
+    fi
+    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${dirty}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  fi
 }
 
 # Dynamically set PROMPT: one-line in ~, two-line elsewhere
