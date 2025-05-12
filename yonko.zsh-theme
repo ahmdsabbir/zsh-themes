@@ -66,6 +66,8 @@ set_prompt() {
   else
     PROMPT="${venv_part}${dir_part} ${git_part}"$'\n'"${prompt_end} "
   fi
+  
+  RPROMPT="${ssh_part}"
 }
 
 # Update prompt before each command
@@ -74,4 +76,3 @@ precmd_functions+=(set_prompt)
 chpwd_functions+=(set_prompt)
 
 # Disable right prompt
-RPROMPT="${ssh_part}"
