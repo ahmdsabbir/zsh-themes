@@ -65,6 +65,8 @@ set_prompt() {
 
 # Update prompt before each command
 precmd_functions+=(set_prompt)
+# Update prompt befor dir change command
+chpwd_functions+=(set_prompt)
 
 # Disable right prompt
 RPROMPT=''
