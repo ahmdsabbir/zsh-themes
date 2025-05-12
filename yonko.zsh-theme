@@ -1,5 +1,5 @@
 # Git prompt settings with Git symbol
-ZSH_THEME_GIT_PROMPT_PREFIX="%F{81} "
+ZSH_THEME_GIT_PROMPT_PREFIX="%F{81}⌥"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
 ZSH_THEME_GIT_PROMPT_DIRTY="%F{red}✹%f"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
@@ -16,7 +16,7 @@ short_pwd() {
     if (NF >= 2) print $(NF-1) "/" $NF;
     else print $NF
   }')
-  echo "%F{88}${short}%f"
+  echo "%F{88}🗂 ${short}%f"
 }
 
 # SSH lock icon if over SSH
