@@ -6,8 +6,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Virtualenv icon
 VIRTUAL_ENV_DISABLE_PROMPT=1
-ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}(venv "
-ZSH_THEME_VIRTUALENV_SUFFIX=") "
+ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}⚙"
+ZSH_THEME_VIRTUALENV_SUFFIX=" "
 
 # Show only last two directories in path
 short_pwd() {
