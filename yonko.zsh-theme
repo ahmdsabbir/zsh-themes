@@ -6,8 +6,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Virtualenv icon
 VIRTUAL_ENV_DISABLE_PROMPT=1
-ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow} "
-ZSH_THEME_VIRTUALENV_SUFFIX=" "
+ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}(venv "
+ZSH_THEME_VIRTUALENV_SUFFIX=") "
 
 # Show only last two directories in path
 short_pwd() {
@@ -16,7 +16,7 @@ short_pwd() {
     if (NF >= 2) print $(NF-1) "/" $NF;
     else print $NF
   }')
-  echo "%F{88} ${short}%f"
+  echo "%F{88}${short}%f"
 }
 
 # SSH lock icon if over SSH
@@ -62,9 +62,9 @@ set_prompt() {
   local prompt_end='%F{87}⌘%f'
 
   if is_home; then
-    PROMPT="${ssh_part}${venv_part}${dir_part} ${git_part} ${prompt_end} "
+    PROMPT="${venv_part}${dir_part} ${git_part} ${prompt_end} "
   else
-    PROMPT="${ssh_part}${venv_part}${dir_part} ${git_part}"$'\n'"${prompt_end} "
+    PROMPT="${venv_part}${dir_part} ${git_part}"$'\n'"${prompt_end} "
   fi
 }
 
@@ -74,4 +74,4 @@ precmd_functions+=(set_prompt)
 chpwd_functions+=(set_prompt)
 
 # Disable right prompt
-RPROMPT=''
+RPROMPT="${ssh_part}"
