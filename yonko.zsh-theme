@@ -6,7 +6,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Virtualenv icon
 VIRTUAL_ENV_DISABLE_PROMPT=1
-ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}"
+ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow} "
 ZSH_THEME_VIRTUALENV_SUFFIX=" "
 
 # Show only last two directories in path
@@ -27,7 +27,7 @@ ssh_lock_prompt() {
 # Virtualenv display
 virtualenv_prompt_info() {
   if [[ -n "$VIRTUAL_ENV" ]]; then
-    echo "${ZSH_THEME_VIRTUALENV_PREFIX}${VIRTUAL_ENV:t}${ZSH_THEME_VIRTUALENV_SUFFIX}"
+    echo "${ZSH_THEME_VIRTUALENV_PREFIX}${ZSH_THEME_VIRTUALENV_SUFFIX}"
   fi
 }
 
