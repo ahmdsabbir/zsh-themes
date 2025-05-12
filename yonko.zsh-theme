@@ -6,14 +6,28 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Virtualenv icon
 VIRTUAL_ENV_DISABLE_PROMPT=1
-ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}venv("
+ZSH_THEME_VIRTUALENV_PREFIX="%F{yellow}("
 ZSH_THEME_VIRTUALENV_SUFFIX=")%f "
 
-is_home() {
-  if [[ "$dir" == "~" ]]; then
-    return true
-  else
-    return false
+# Show only last two directories in path
+short_pwd() {
+  local dir="${PWD/#$HOME/~}"
+  local short=$(echo "$dir" | awk -F/ '{
+    if (NF >= 2) print $(NF-1) "/" $NF;
+    else print $NF
+  }')
+  echo "%F{88} /${short}%f"
+}
+
+# SSH lock icon if over SSH
+ssh_lock_prompt() {
+  [[ -n "$SSH_CONNECTION" ]] && echo "%F{magenta}🔒%f "
+}
+
+# Virtualenv display
+virtualenv_prompt_info() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    echo "${ZSH_THEME_VIRTUALENV_PREFIX}${VIRTUAL_ENV:t}${ZSH_THEME_VIRTUALENV_SUFFIX}"
   fi
 }
 
@@ -25,39 +39,24 @@ git_commit_id() {
 # Git commit hash display
 git_commit_prompt() {
   local commit=$(git_commit_id)
-  if [ -n "$commit" ]; then
-    echo " %F{75}[%f%F{75}${commit}%f%F{75}]%f"
-  fi
+  [[ -n "$commit" ]] && echo " %F{75}[%f%F{75}${commit}%f%F{75}]%f"
 }
 
-# Show only last two dirs with folder icon (fully green)
-short_pwd() {
+# Check if current directory is ~
+is_home() {
   local dir="${PWD/#$HOME/~}"
-  local short=$(echo "$dir" | awk -F/ '{
-    if (NF >= 2) print $(NF-1) "/" $NF;
-    else print $NF
-  }')
-  echo "%F{88} /${short}%f"
+  [[ "$dir" == "~" ]]
 }
 
-# SSH lock icon if over SSH
-ssh_lock_prompt() {
-  if [[ -n "$SSH_CONNECTION" ]]; then
-    echo "%F{magenta}🔒%f "
-  fi
-}
-
-# Dynamically set PROMPT: one-line in ~, two-line otherwise
+# Dynamically set PROMPT: one-line in ~, two-line elsewhere
 set_prompt() {
-  local dir="${PWD/#$HOME/~}"
-
   local ssh_part='$(ssh_lock_prompt)'
   local venv_part='$(virtualenv_prompt_info)'
   local dir_part='$(short_pwd)'
   local git_part='$(git_prompt_info)$(git_commit_prompt)'
-  local prompt_end='%F{87}$%f'
+  local prompt_end='%F{87}⌘%f'
 
-  if is_home(); then
+  if is_home; then
     PROMPT="${ssh_part}${venv_part}${dir_part} ${git_part} ${prompt_end} "
   else
     PROMPT="${ssh_part}${venv_part}${dir_part} ${git_part}"$'\n'"${prompt_end} "
@@ -67,5 +66,5 @@ set_prompt() {
 # Update prompt before each command
 precmd_functions+=(set_prompt)
 
-# No right prompt
+# Disable right prompt
 RPROMPT=''
