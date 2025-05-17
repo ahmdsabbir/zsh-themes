@@ -48,6 +48,13 @@ is_home() {
   [[ "$dir" == "~" ]]
 }
 
+git_diff_stats() {
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    local stats=$(git diff --shortstat 2>/dev/null)
+    [[ -n "$stats" ]] && echo "%F{67}$stats%f"
+  fi
+}
+
 git_prompt_info() {
   ref=$(git symbolic-ref --short HEAD 2>/dev/null)
   if [[ -n "$ref" ]]; then
@@ -61,21 +68,26 @@ git_prompt_info() {
   fi
 }
 
+
 # Dynamically set PROMPT: one-line in ~, two-line elsewhere
 set_prompt() {
   local ssh_part='$(ssh_lock_prompt)'
   local venv_part='$(virtualenv_prompt_info)'
   local dir_part='$(short_pwd)'
-  local git_part='$(git_prompt_info)$(git_commit_prompt)'
+  local git_part='$(git_prompt_info)$(git_commit_prompt)$(git_diff_stats)'
   local prompt_end='%F{87}⌘%f '
+
+  # Computer name (hostname)
+  local hostname_part="%F{113}💻 ${HOST}%f"
+  local username_part="%F{116}@${USER}%f"
 
   if is_home; then
     PROMPT="${venv_part}${dir_part} ${git_part} ${prompt_end} "
   else
     PROMPT="${venv_part}${dir_part} ${git_part}"$'\n'"${prompt_end} "
   fi
-  
-  RPROMPT="${ssh_part}"
+
+  RPROMPT="${ssh_part}${hostname_part}${username_part}"
 }
 
 # Update prompt before each command
