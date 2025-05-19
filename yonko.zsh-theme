@@ -21,11 +21,11 @@ short_pwd() {
 
 # SSH lock icon if over SSH
 ssh_lock_prompt() {
-  [[ -n "$SSH_CONNECTION" ]] && echo "%F{magenta}🔒%f "
   if [[ -n "$SSH_CONNECTION" ]]; then
     echo "🔒 "
   else
     echo "💻 "
+  fi
 }
 
 # Virtualenv display
