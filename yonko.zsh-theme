@@ -22,6 +22,10 @@ short_pwd() {
 # SSH lock icon if over SSH
 ssh_lock_prompt() {
   [[ -n "$SSH_CONNECTION" ]] && echo "%F{magenta}🔒%f "
+  if [[ -n "$SSH_CONNECTION" ]]; then
+    echo "🔒 "
+  else
+    echo "💻 "
 }
 
 # Virtualenv display
@@ -78,7 +82,7 @@ set_prompt() {
   local prompt_end='%F{87}⌘%f '
 
   # Computer name (hostname)
-  local hostname_part="%F{113}💻 ${HOST}%f"
+  local hostname_part="%F{113}${HOST}%f"
   local username_part="%F{116}@${USER}%f"
 
   if is_home; then
