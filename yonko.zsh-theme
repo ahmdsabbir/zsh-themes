@@ -16,7 +16,7 @@ short_pwd() {
     if (NF >= 2) print $(NF-1) "/" $NF;
     else print $NF
   }')
-  echo "%F{76}🗂  ${short}%f"
+  echo "%F{76}${short}%f"
 }
 
 # SSH lock icon if over SSH
@@ -79,7 +79,7 @@ set_prompt() {
   local venv_part='$(virtualenv_prompt_info)'
   local dir_part='$(short_pwd)'
   local git_part='$(git_prompt_info)$(git_commit_prompt)$(git_diff_stats)'
-  local prompt_end='%F{87}⌘%f '
+  local prompt_end='%F{87}❯%f '
 
   # Computer name (hostname)
   local hostname_part="%F{113}${HOST}%f"
